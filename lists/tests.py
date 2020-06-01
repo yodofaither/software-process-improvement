@@ -15,7 +15,7 @@ class ListViewTest(TestCase):
     def test_uses_list_template(self):
         list_ = List.objects.create()
         response = self.client.get(f'/lists/{list_.id}/')
-        # self.assertTemplateUsed(response, 'list.html')
+        self.assertTemplateUsed(response, 'list.html')
         
     def test_displays_only_items_for_that_list(self):
         correct_list = List.objects.create()
@@ -80,7 +80,7 @@ class NewListTest(TestCase):
         new_list = List.objects.first()
         self.assertRedirects(response, f'/lists/{new_list.id}/')
         
-class NewItenTest(TestCase):
+class NewItemTest(TestCase):
     def test_can_save_a_POST_request_to_an_existing_list(self):
         other_list = List.objects.create()
         correct_list = List.objects.create()
@@ -88,7 +88,7 @@ class NewItenTest(TestCase):
         self.client.post(
             f'/lists/{correct_list.id}/add_item',
             data={'item_text': 'A new item for an existing list'}
-            )
+        )
         
         self.assertEqual(Item.objects.count(), 1)
         new_item = Item.objects.first()
@@ -102,7 +102,7 @@ class NewItenTest(TestCase):
         response = self.client.post(
             f'/lists/{correct_list.id}/add_item',
             data={'item_text': 'A new item for an existing list'}
-            )
+        )
         
         self.assertRedirects(response, f'/lists/{correct_list.id}/')
 
