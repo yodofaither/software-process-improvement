@@ -5,28 +5,27 @@ import random
 REPO_URL = 'git@github.com:saberfig/software-process-improvement.git'
 
 def deploy():
-    site_folder = f'/home/{env.user}/sites/{env.host}'
-    source_folder = site_folder + 'source'
+    site_folder = f'/{env.user}/sites/{env.host}'
+    source_folder = site_folder + '/source'
     _create_directory_structure_if_necessary(site_folder)
     _get_latest_source(source_folder)
-    _update_setting(source_folder, env.host)
+    _update_settings(source_folder, env.host)
     _update_virtualenv(source_folder)
     _update_static_files(source_folder)
     _update_database(source_folder)
 
-# 创建文件夹结构
 def _create_directory_structure_if_necessary(site_folder):
     for subfolder in ('database', 'static', 'virtualenv', 'source'):
         run(f'mkdir -p {site_folder}/{subfolder}')
 
 def _get_latest_source(source_folder):
-    if exists(source_folder + '/.git'): # 如果已经存在.git文件夹
-        run(f'cd {source_folder} && git fetch') # 进入source_folder并且抓取最新内容
-    else: # 没有git文件夹
-        run(f'git clone {REPO_URL} {source_folder}') # 从GitHub上克隆项目
-    current_commit = local("git log -n l --format=%H", capture=True) # 获取最近一次commit
-    run(f'cd {source_folder} && git reset --hard {current_commit}') # 跳转到最近一次的commit
- 
+    if exists(source_folder + '/.git'):
+        run(f'cd {source_folder} && git fetch')
+    else:
+        run(f'git clone {REPO_URL} {source_folder}')
+    current_commit = local("git log -n l --format=%H", capture=True)
+    run(f'cd {source_folder} && git reset --hard {current_commit}')
+
 def _update_settings(source_folder, site_name):
     settings_path = source_folder + '/superlists/settings.py'
     sed(settings_path, "DEBUG = True", "DEBUG = False")
@@ -40,7 +39,7 @@ def _update_settings(source_folder, site_name):
         key = ''.join(random.SystemRandom().choice(chars) for _ in range(50))
         append(secret_key_file, f'SECRET_KEY = "{key}"')
     append(settings_path, '\nfrom .secret_key import SECRET_KEY')
-    
+
 def  _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip'):
