@@ -1,11 +1,11 @@
 [Unit]
-Description=Gunicorn service for 222.137.172.124
+Description=Gunicorn service for 35.220.204.63
 
 [Service]
 Restart=on-failure
 User=root
-WorkingDirectory=/home/root/sites/222.137.172.124/source
-ExecStart=/home/root/sites/222.137.172.124/virtualenv/bin/gunicorn --bind unix:/tmp/222.137.172.124.socket superlists.wsgi:application
+WorkingDirectory=/home/root/sites/35.220.204.63/source
+ExecStart=/home/root/sites/35.220.204.63/virtualenv/bin/gunicorn --bind unix:/tmp/35.220.204.63.socket superlists.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

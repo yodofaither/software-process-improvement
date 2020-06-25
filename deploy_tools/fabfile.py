@@ -2,7 +2,7 @@ from fabric.contrib.files import append, exists, sed
 from fabric.api import env, local, run
 import random
 
-REPO_URL = 'git@github.com:saberfig/software-process-improvement.git'
+REPO_URL = 'git@github.com:yodofaither/software-process-improvement.git'
 
 def deploy():
     site_folder = f'/{env.user}/sites/{env.host}'
